@@ -1,31 +1,64 @@
 from typing import List, Optional
+
 from crewai import Agent
+
 from core.llm_config import nexus_llm
 
 
 def get_architect(tools: Optional[List] = None) -> Agent:
     """Returns the Nexus Cloud Architect Agent."""
+
     return Agent(
         role='Arquiteto de Cloud Nexus',
-        goal='Projetar infraestrutura seguindo normas e gerando código HCL.',
-        backstory='Especialista em AWS/Terraform com foco em governança.',
+        goal=(
+            'Projetar infraestrutura seguindo normas e gerando código HCL '
+            'válido e compatível com AWS Provider ~> 5.0.'
+        ),
+        backstory=(
+            'Especialista em AWS/Terraform com foco em governança. '
+            'Ao gerar Terraform para AWS Provider v5: '
+            'use recursos S3 separados para versioning, public access block, '
+            'encryption, logging e lifecycle. '
+            'Em aws_sns_topic_policy use arn, nunca topic. '
+            'aws_iam_policy_document deve ser data, nunca resource. '
+            'Em aws_iam_policy_document use blocos principals e condition. '
+            'Para KMS use sse_algorithm = "aws:kms". '
+            'Não crie dependências circulares. '
+            'Sempre grave ou sobrescreva exclusivamente main.tf. '
+            'Utilize somente as ferramentas explicitamente disponíveis ao agente. '
+            'Nunca tente chamar ferramentas que não estejam na lista de tools. '
+            'Não crie recursos adicionais que não sejam necessários para atender à tarefa. '
+            'Não adicione OIDC, GitHub Actions, Lambda, replicação ou outros serviços '
+            'a menos que sejam explicitamente solicitados pela tarefa ou necessários '
+            'para corrigir uma falha retornada pelas ferramentas.'
+        ),
         tools=tools or [],
         llm=nexus_llm,
         verbose=True
     )
-
 
 def get_auditor(tools: Optional[List] = None) -> Agent:
     """Returns the DevSecOps Engineer Agent."""
     return Agent(
         role='Engenheiro de DevSecOps',
-        goal='Garantir segurança e conformidade total dos projetos.',
-        backstory='Auditor rigoroso que utiliza ferramentas de scan e OPA.',
+        goal=(
+            'Garantir segurança, conformidade e validade técnica '
+            'dos projetos Terraform.'
+        ),
+        backstory=(
+            'Auditor DevSecOps rigoroso que utiliza ferramentas especializadas '
+            'para validar infraestrutura como código. '
+            'Deve executar e interpretar os resultados das ferramentas de '
+            'Terraform, Checkov e OPA, diferenciando claramente erros técnicos, '
+            'falhas de segurança e violações de governança. '
+            'Não deve inventar falhas que não tenham sido retornadas pelas ferramentas. '
+            'Nunca deve alterar nem criar arquivos .tf; deve apenas analisar o main.tf '
+            'e produzir um relatório objetivo para o arquiteto.'
+        ),
         tools=tools or [],
         llm=nexus_llm,
         verbose=True
     )
-
 
 def get_sre_agent(tools: Optional[List] = None) -> Agent:
     """Returns the Kubernetes Specialist SRE Agent."""
@@ -61,7 +94,7 @@ def get_aiops_agent(tools: Optional[List] = None) -> Agent:
             'Especialista em séries temporais, PromQL e algoritmos de Machine Learning '
             'como Prophet e Isolation Forest. Você não espera o alerta tocar, você prevê o alerta.'
         ),
-        tools=tools or [], 
+        tools=tools or [],
         llm=nexus_llm,
         verbose=True
     )
@@ -76,8 +109,8 @@ def get_chatops_agent(tools: Optional[List] = None) -> Agent:
             'Especialista em governança, RBAC e integrações com Slack/Teams. '
             'Você nunca executa uma ação destrutiva sem antes pedir permissão a um humano autorizado.'
         ),
-        tools=tools or [], 
-        llm=nexus_llm, 
+        tools=tools or [],
+        llm=nexus_llm,
         verbose=True
     )
 
@@ -86,7 +119,10 @@ def get_devsecops_agent(tools: Optional[List] = None) -> Agent:
     """Returns the AI DevSecOps Analyst Agent."""
     return Agent(
         role='Analista de DevSecOps AI',
-        goal='Triar vulnerabilidades reais e eliminar falsos positivos de scans de segurança, priorizando o que é explorável.',
+        goal=(
+            'Triar vulnerabilidades reais e eliminar falsos positivos de scans '
+            'de segurança, priorizando o que é explorável.'
+        ),
         backstory=(
             'Um Especialista em segurança ofensiva que sabe distinguir uma biblioteca vulnerável '
             'teórica de uma tentativa de invasão ativa ou backdoor em execução.'
@@ -117,7 +153,10 @@ def get_finops_agent(tools: Optional[List] = None) -> Agent:
     return Agent(
         role='Consultor de FinOps Cloud',
         goal='Reduzir o desperdício financeiro na nuvem e sugerir o dimensionamento correto (rightsizing).',
-        backstory='Um auditor financeiro que entende de nuvem. Ele caça recursos zumbis e instâncias superdimensionadas.',
+        backstory=(
+            'Um auditor financeiro que entende de nuvem. '
+            'Ele caça recursos zumbis e instâncias superdimensionadas.'
+        ),
         tools=tools or [],
         llm=nexus_llm,
         verbose=True
@@ -143,7 +182,10 @@ def get_nexus_manager_agent(tools: Optional[List] = None) -> Agent:
     """Returns the Nexus Operations Manager (Orchestrator Agent)."""
     return Agent(
         role='Nexus Manager (Orquestrador de Operações)',
-        goal='Coordenar especialistas em SRE, Segurança e FinOps para resolver crises e otimizar a infraestrutura.',
+        goal=(
+            'Coordenar especialistas em SRE, Segurança e FinOps para resolver '
+            'crises e otimizar a infraestrutura.'
+        ),
         backstory=(
             'Você é o cérebro do sistema Nexus. Sua função é delegar tarefas estrategicamente para '
             'os agentes especialistas e consolidar os resultados em relatórios executivos de alto impacto.'
@@ -152,6 +194,4 @@ def get_nexus_manager_agent(tools: Optional[List] = None) -> Agent:
         llm=nexus_llm,
         verbose=True,
         allow_delegation=True
-    )
-=True # <--- ESSENCIAL para ele conseguir mandar nos outros
     )

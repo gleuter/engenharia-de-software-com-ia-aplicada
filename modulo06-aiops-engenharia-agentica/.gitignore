@@ -17,3 +17,20 @@ __pycache__/
 .DS_Store
 .idea/
 .vscode/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+tfplan
+.terraform.tfstate.lock.info
+crash.log
+crash.*.log
+
+# Instaladores e ferramentas locais
+/aws/
+/awscliv2.zip
+
+# Cópias locais de trabalho
+* Original.py

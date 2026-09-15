@@ -6,7 +6,7 @@ load_dotenv()
 
 # Centraliza a inteligência do projeto
 nexus_llm = LLM(
-    model="groq/llama-3.1-8b-instant",
-    api_key=os.getenv("GROQ_API_KEY"),
+   model="openrouter/inclusionai/ling-3.0-flash-vl:free",
+    api_key=os.getenv("OPENROUTER_API_KEY"),
     temperature=0.2
 )
