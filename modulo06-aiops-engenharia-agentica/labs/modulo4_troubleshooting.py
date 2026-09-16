@@ -37,15 +37,31 @@ task_diagnose = Task(
 
 # 3. Tarefa 4.4 - Self-Healing (Prática 3)
 task_self_healing = Task(
-    description="""Com base no diagnóstico do SRE, atue como Arquiteto e gere o arquivo 'checkout-k8s-fix.yaml' com a correção sugerida.
-    ATENÇÃO - REGRAS ESTRITAS DE LABORATÓRIO (NÃO DESVIE): 
+    description="""
+    Com base no diagnóstico do SRE, atue como Arquiteto e gere
+    o arquivo 'checkout-k8s-fix.yaml' com a correção sugerida.
+
+    ATENÇÃO - REGRAS ESTRITAS DE LABORATÓRIO (NÃO DESVIE):
     1. Gere como 'kind: Deployment'. Nunca 'kind: Pod' solto.
     2. Imagem OBRIGATÓRIA: 'nginx:latest'.
     3. Porta do container e dos probes: 80.
-    4. O 'path' dos probes HTTPGet DEVE ser obrigatoriamente '/' (pois o Nginx retorna 404 para '/healthz').
-    5. Na API V1, utilize 'initialDelaySeconds'.""",
-    expected_output="Manifesto YAML corrigido, validado e persistido no disco.",
-    agent=architect
+    4. O 'path' dos probes HTTPGet DEVE ser obrigatoriamente '/'.
+    5. Na API V1, utilize 'initialDelaySeconds'.
+
+    Utilize obrigatoriamente a ferramenta write_file para salvar
+    o manifesto no arquivo 'checkout-k8s-fix.yaml'.
+
+    Não apenas mostre o YAML na resposta.
+
+    A tarefa só deve ser considerada concluída quando a ferramenta
+    write_file confirmar que o arquivo foi gravado no disco.
+    """,
+    expected_output=(
+        "Arquivo checkout-k8s-fix.yaml criado e persistido no disco "
+        "com confirmação da ferramenta write_file."
+    ),
+    agent=architect,
+    context=[task_diagnose]
 )
 
 # 4. Orquestração
