@@ -1,0 +1,24 @@
+{
+  "servers": {
+    "playwright": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp@latest"
+      ]
+    },
+    "erickwendel-contributions": {
+      "type": "stdio",
+      "command": "/home/gleuter/.nvm/versions/node/v24.20.0/bin/npx",
+      "args": [
+        "-y",
+        "@erickwendel/contributions-mcp"
+      ],
+      "env": {
+        "PATH": "/home/gleuter/.nvm/versions/node/v24.20.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+      }
+    }
+  },
+  "inputs": []
+}
