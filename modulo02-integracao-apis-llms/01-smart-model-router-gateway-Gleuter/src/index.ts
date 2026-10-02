@@ -1,6 +1,9 @@
+import { config } from "./config.ts";
+import{OpenRouterService} from "./openrouterService.ts";
 import { createServer } from "./server.ts";
 
-const app = createServer()
+const routerService = new OpenRouterService(config);
+const app = createServer(routerService)
 
 app.listen({ port: 3000, host: '0.0.0.0' })
 app.log.info(`Server is running at http://localhost:3000`) 

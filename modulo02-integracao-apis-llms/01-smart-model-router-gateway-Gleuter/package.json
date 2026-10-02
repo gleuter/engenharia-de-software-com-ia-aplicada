@@ -4,15 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node --watch --inspect src/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node --use-system-ca --env-file .env --inspect --watch src/index.ts",
+    "test:dev": "node --use-system-ca --env-file .env --inspect --watch --test ./tests/**/*.test.ts",
+    "test": "node --use-system-ca --env-file .env  --test --test ./tests/**/*.test.ts"
+    
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "module",
   "dependencies": {
-    "fastify": "^5.12.5",
-    "@types/node": "^26.6.3"
+    "@openrouter/sdk": "0.5.1",
+    "@types/node": "^26.6.3",
+    "fastify": "^5.12.5"
   }
 }
